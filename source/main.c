@@ -50,20 +50,20 @@ void DMA_init(void)
 
 	DMA0->ERQ = 0x01;//enables DMA0 request
 
-	DMA0->TCD[0].SADDR = (uint32_t)(&g_data_source[0]);/*defines source data address*/
-	DMA0->TCD[0].SOFF = 2;/*Source address signed offset;it is expressed in number of bytes*/
+	DMA0->TCD[0].SADDR = (uint32_t)(&g_data_source[4]);/*defines source data address*/
+	DMA0->TCD[0].SOFF = 4;/*Source address signed offset;it is expressed in number of bytes*/
 	DMA0->TCD[0].DADDR = (uint32_t)(&g_data_desti[0]);/*defines destination data address*/
 	DMA0->TCD[0].DOFF = 1;/*destination address signed offset;it is expressed in number of bytes*/
 
 	DMA0->TCD[0].CITER_ELINKNO = DMA_CITER_ELINKNO_CITER(NUM_STEPS);// NUM_STEPS;/*CITER-MINOR = 1cuantos paquetes de bites quiero transferir*/
 	DMA0->TCD[0].BITER_ELINKNO = DMA_BITER_ELINKNO_BITER(NUM_STEPS);/*BITER = 1; citer y biter mismo valor y se autocargar cuando ocurre major loop*/
-	DMA0->TCD[0].NBYTES_MLNO = 32;/*byte number*/
+	DMA0->TCD[0].NBYTES_MLNO = 6;/*byte number*/
 //cuantos #bytes//
 
 	DMA0->TCD[0].ATTR = 0x100;/*8 bit transfer size, in order to transfer see Kinetis user manual*/
 //000 8-bit  -001 16-bit
 	////una vez que el major loop se cumplieron se restablescan las direcciones
-	DMA0->TCD[0].SLAST = 0;//restores the source address to the initial value, which is expressed in the amount of bytes to restore*/
+	DMA0->TCD[0].SLAST = -20;//restores the source address to the initial value, which is expressed in the amount of bytes to restore*/
 	DMA0->TCD[0].DLAST_SGA = 0;/*restores the destination address to the initial value, which is expressed in the amount of bytes to restore*/
 
 

@@ -10,20 +10,14 @@
 #define NUM_STEPS (200u)
 #define SYSTEM_CLOCK (21000000u)
 #define DELAY (.02F)
-
-#define ARRAY_SIZE (200u)
 #define NEXT (1u)
-
 #define DMA_CH0 (0x01u)
 #define DMA_SOURCE_GPIO (51u)
-
-#define SYSTEM_CLOCK 21000000
-
 #define TRIANGULAR_SOURCE &saw[0]
 #define SIN_SOURCE &sen[0]
 #define SQUARE_SOURCE &square[0]
 
-
+/*Enumeration to refer waveform*/
 typedef enum
 {
 	TRIANGLE,
@@ -31,13 +25,17 @@ typedef enum
 	SQUARE
 }waveform_t;
 
-uint16_t g_data_source[ARRAY_SIZE] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};//defines source data space
-uint16_t g_data_desti[ARRAY_SIZE]; //defines destination data space
+/*Values for triangle signal*/
 uint16_t saw[200]={0,	41,	82,	123,	164,	205,	246,	287,	328,	369,	410,	451,	492,	532,	573,	614,	655,	696,	737,	778,	819,	860,	901,	942,	983,	1024,	1065,	1106,	1147,	1188,	1229,	1270,	1311,	1352,	1393,	1434,	1475,	1516,	1556,	1597,	1638,	1679,	1720,	1761,	1802,	1843,	1884,	1925,	1966,	2007,	2048,	2089,	2130,	2171,	2212,	2253,	2294,	2335,	2376,	2417,	2458,	2499,	2540,	2580,	2621,	2662,	2703,	2744,	2785,	2826,	2867,	2908,	2949,	2990,	3031,	3072,	3113,	3154,	3195,	3236,	3277,	3318,	3359,	3400,	3441,	3482,	3523,	3564,	3604,	3645,	3686,	3727,	3768,	3809,	3850,	3891,	3932,	3973,	4014,	4055, 4014,	3973,	3932,	3891,	3850,	3809,	3768,	3727,	3686,	3645,	3604,	3564,	3523,	3482,	3441,	3400,	3359,	3318,	3277,	3236,	3195,	3154,	3113,	3072,	3031,	2990,	2949,	2908,	2867,	2826,	2785,	2744,	2703,	2662,	2621,	2580,	2540,	2499,	2458,	2417,	2376,	2335,	2294,	2253,	2212,	2171,	2130,	2089,	2048,	2007,	1966,	1925,	1884,	1843,	1802,	1761,	1720,	1679,	1638,	1597,	1556,	1516,	1475,	1434,	1393,	1352,	1311,	1270,	1229,	1188,	1147,	1106,	1065,	1024,	983,	942,	901,	860,	819,	778,	737,	696,	655,	614,	573,	532,	492,	451,	410,	369,	328,	287,246,205,164,123,82,	41};
+/*Values for sin signal*/
 uint16_t sen[100]={2048,2177,2305,2432,2557,2681,2802,2920,3035,3145,3252,3353,3450,3541,3626,3705,3777,3843,3901,3952,3996,4032,4060,4080,4092,4095,4092,4080,4060,4032,3996,3952,3901,3843,3777,3705,3626,3541,3450,3353,3252,3145,3035,2920,2802,2681,2557,2432,2305,2177,2048,1919,1791,1664,1539,1415,1294,1176,1061,951,844,743,646,555,470,391,319,253,195,144,100,64,36,16,4,0,4,16,36,64,100,144,195,253,319,391,470,555,646,743,844,951,1061,1176,1294,1415,1539,1664,1791,1919};
+/*Values for square signal*/
 uint16_t square[2]={4095,0};
+/*FSM_state´s initial state*/
 waveform_t current_state = SIN;
 
+
+/*Enumeration to refer waveform*/
 typedef struct
 {
 	const uint16_t* s_address;
@@ -47,12 +45,14 @@ typedef struct
 }State_t;
 
 
+/*Waveforms FSM*/
 const State_t FSM_states[3]=
   {
 	{TRIANGULAR_SOURCE, -400, 200, {TRIANGLE, SIN}},
 	{SIN_SOURCE, -200,100, {SIN, SQUARE}},
 	{SQUARE_SOURCE, -4, 2,{SQUARE, TRIANGLE}}
  };
+
 
 /*ISR for interruption on PORTC*/
 void PORTC_IRQHandler()
@@ -64,21 +64,12 @@ void PORTC_IRQHandler()
 
 }
 
+/*ISR for DMA0*/
 void DMA0_IRQHandler(void)
 {
-
-	uint16_t i;
-
-	DMA0->INT = DMA_CH0;
-	for (i=0;i<16;i++)
-	{
-		printf("%d,",DAC0->DAT[0]);
-	}
-
-
 }
 
-
+/*Enable DMA and DMAMUX clock gating*/
 void DMA_clock_gating(void)
 {
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
@@ -86,6 +77,7 @@ void DMA_clock_gating(void)
 }
 
 
+/*DMA configuration*/
 void DMA_init(void)
 {
 

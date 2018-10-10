@@ -18,7 +18,7 @@ void DAC_enable(void){
 	 DAC0->C0 = DAC_C0_DACEN_MASK | DAC_C0_DACRFS_MASK;
 }
 
-void DAC_Set(uint8 dataH, uint8 dataL){
+void DAC_Set(uint8_t dataH, uint8_t dataL){
 	DAC0->DAT[0].DATH =(dataH); //offset de un 1h
 	DAC0->DAT[0].DATL =(dataL);
 	//DAC Data Low Register (DACx_DATnL) 8 bits

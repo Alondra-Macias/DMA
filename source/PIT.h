@@ -8,7 +8,7 @@
 #ifndef PIT_H_
 #define PIT_H_
 
-#include "GPIO.h"
+
 #include "stdint.h"
 #include "MK64F12.h"
 #define MOTOR_PIT PIT_0
@@ -16,7 +16,7 @@
 #define READ_DELAY 0.5F
 #define SYSTEM_CLOCK 21000000
 typedef float My_float_pit_t;
-
+#include "GPIO.h"
 
 /*! This enumerated constant are used to select the PIT to be used*/
 typedef enum {PIT_0,PIT_1,PIT_2,PIT_3} PIT_timer_t;

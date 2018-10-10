@@ -8,8 +8,6 @@
  */
 #include "Switches.h"
 
-static BooleanType sw2_intr_flag = FALSE;
-static BooleanType sw3_intr_flag = FALSE;
 
 /*
  \brief
@@ -35,34 +33,16 @@ void SW_setup(void)
 		/*configures Sw3 as input*/
 		GPIO_data_direction_pin(SW3_port, GPIO_INPUT, SW3_PIN);
 
-		NVIC_setBASEPRI_threshold(PRIORITY_12);// se activen desde el nivel del 0 al 12
+		NVIC_set_basepri_threshold(PRIORITY_12);// se activen desde el nivel del 0 al 12
 		/*Enables and sets a particular interrupt and its priority*/
-		NVIC_enableInterruptAndPriotity(PORTC_IRQ,PRIORITY_5); //active y conf la prioridad del puerto c de nivel 5
+		NVIC_enable_interrupt_and_priotity(PORTC_IRQ,PRIORITY_5); //active y conf la prioridad del puerto c de nivel 5
 		/*Enables and sets a particular interrupt and its priority*/
-		NVIC_enableInterruptAndPriotity(PORTA_IRQ,PRIORITY_5); //mas importante que el 5
+		NVIC_enable_interrupt_and_priotity(PORTA_IRQ,PRIORITY_5); //mas importante que el 5
 
 }
 
 
-uint8_t sw2_get_intr_flag(void)
-{
-	return sw2_intr_flag;
-}
 
-uint8_t sw3_get_intr_flag(void)
-{
-	return sw2_intr_flag;
-}
-
-void sw2_clear_intr_flag(void)
-{
-	sw2_intr_flag = FALSE;
-}
-
-void sw3_clear_intr_flag(void)
-{
-	sw3_intr_flag = FALSE;
-}
 
 void sw2_enable_interrupt(void)
 {

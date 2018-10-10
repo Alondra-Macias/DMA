@@ -10,7 +10,7 @@
 
 
 #include "PIT.h"
-#include "DataTypeDefinitions.h"
+#include "Bits.h"
 
 
 static uint8_t g_pit_intr_flag_0 = FALSE;
@@ -56,7 +56,6 @@ void PIT2_IRQHandler()
 
 	PIT->CHANNEL[PIT_2].TCTRL &= ~(PIT_TCTRL_TIE_MASK);//enables PIT timer interrupt
 	PIT->CHANNEL[2].TCTRL &= ~(PIT_TCTRL_TEN_MASK);//enables timer0
-	g_read = GPIO_read_port(GPIO_D);
 	g_pit_intr_flag_2 = TRUE;
 }
 
@@ -70,7 +69,6 @@ void PIT3_IRQHandler()
 
 	PIT->CHANNEL[PIT_2].TCTRL &= ~(PIT_TCTRL_TIE_MASK);//enables PIT timer interrupt
 	PIT->CHANNEL[2].TCTRL &= ~(PIT_TCTRL_TEN_MASK);//enables timer0
-	g_read = GPIO_read_port(GPIO_D);
 	g_pit_intr_flag_3 = TRUE;
 }
 

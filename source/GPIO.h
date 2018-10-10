@@ -1,20 +1,19 @@
-/**
-	\file
-	\brief
-		This is the source file for the GPIO device driver for Kinetis K64.
-		It contains all the implementation for configuration functions and runtime functions.
-		i.e., this is the application programming interface (API) for the GPIO peripheral.
-	\author J. Luis Pizano Escalante, luispizano@iteso.mx
-	\date	5/09/2018
-	\todo
-	    Interrupts are not implemented in this API implementation.
+/*
+ * GPIO.h
+ *
+ *  Created on: Sep 15, 2018
+ *      Author: marga
  */
+
 #ifndef GPIO_H_
 #define GPIO_H_
 
-
 #include "stdint.h"
+#include "Bits.h"
+#include "PIT.h"
 
+/** Constant used to be shifted to modify specific pin */
+#define MASK_PIN_SELECTED 0x00000001
 
 /** Constant that represent the clock enable for GPIO A */
 #define GPIO_CLOCK_GATING_PORTA 0x00000200
@@ -71,31 +70,13 @@
 /** Sets Interrupt when logic 1.*/
 #define INTR_LOGIC1        0x000C0000
 
-
-
-#define SW3_INT PORTA_IRQHandler
-
-#define SW2_INT PORTC_IRQHandler
-
-
-typedef struct
-{
-	uint8_t flag_port_a : 1;
-	uint8_t flag_port_b : 1;
-	uint8_t flag_port_c : 1;
-	uint8_t flag_port_d : 1;
-	uint8_t flag_port_e : 1;
-} gpio_interrupt_flags_t;
-
-
-
+#define INTR_PIN_MASK 0x000000F0
+#define DATA_AVAILABLE_PIN 4
 
 /*! This definition is used to configure whether a pin is an input or an output*/
 typedef enum {GPIO_INPUT,/*!< Definition to configure a pin as input */
 			  GPIO_OUTPUT /*!< Definition to configure a pin as output */
 			 }GPIO_PIN_CONFIG;
-
-
 /*! These constants are used to select an specific port in the different API functions*/
 typedef enum{GPIO_A, /*!< Definition to select GPIO A */
 			 GPIO_B, /*!< Definition to select GPIO B */
@@ -109,15 +90,22 @@ typedef enum{GPIO_A, /*!< Definition to select GPIO A */
 typedef const uint32_t gpio_pin_control_register_t;
 
 
-
-uint8_t GPIO_clear_irq_status(gpio_port_name_t gpio);
-
-uint8_t GPIO_get_irq_status(gpio_port_name_t gpio);
-
-
 /********************************************************************************************/
 /********************************************************************************************/
 /********************************************************************************************/
+
+/*!
+ 	 \brief	 The interruption of PORTC IRQHandler
+ 	 \param[in] void
+ 	 \return void
+ */
+void PORTC_IRQHandler();
+/*!
+ 	 \brief	 The interruption of PORTA IRQHandler
+ 	 \param[in] void
+ 	 \return void
+ */
+void PORTA_IRQHandler();
 /*!
  	 \brief	 This function clears all interrupts that were sensed by the GPIO.
 
@@ -167,7 +155,7 @@ uint8_t GPIO_pin_control_register(gpio_port_name_t portName, uint8_t pin, gpio_p
  	 \return void
 
  */
-void GPIO_data_directionPORT(gpio_port_name_t portName, uint32_t direction);
+void GPIO_data_direction_port(gpio_port_name_t portName, uint32_t direction);
 /********************************************************************************************/
 /********************************************************************************************/
 /********************************************************************************************/
@@ -238,6 +226,67 @@ void GPIO_clear_pin(gpio_port_name_t portName, uint8_t pin);
  	 \param[in] pin Pin to be toggled.
  	 \return void
  */
-void GPIO_tooglePIN(gpio_port_name_t portName, uint8_t pin);
+void GPIO_toogle_pin(gpio_port_name_t portName, uint8_t pin);
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief This toggle the value of a specific pin in a GPIO port, it uses GPIO_PTOR register.
+ 	 \param[in] portName Selected Port.
+ 	 \param[in] pin Pin to be toggled.
+ 	 \return void
+ */
+
+void GPIO_clear_kb_intr(void);
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief clear sw2 flag interruption
+ 	 \param[in] void
+ 	 \return void
+ */
+void GPIO_clear_sw2_intr(void);
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief clear sw3 flag interruption
+ 	 \param[in] void
+ 	 \return void
+ */
+
+void GPIO_clear_sw3_intr(void);
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief return the value of the flag interruption of keyboard
+ 	 \param[in] void
+ 	 \return void
+ */
+BooleanType GPIO_get_kb_intr();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief return the value of the flag interruption of sw2
+ 	 \param[in] void
+ 	 \return void
+ */
+
+BooleanType GPIO_get_sw2_intr();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief return the value of the flag interruption of sw3
+ 	 \param[in] void
+ 	 \return void
+ */
+
+BooleanType GPIO_get_sw3_intr();
+
+
 
 #endif /* GPIO_H_ */

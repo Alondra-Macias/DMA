@@ -42,13 +42,13 @@ typedef enum {bit_0,  /*!< Bit 0 */
 			  bit_29, /*!< Bit 29 */
 	          bit_30, /*!< Bit 30 */
 			  bit_31  /*!< Bit 31 */
-			} BitsTypel;
+			} BitsType;
 
 
 
-//typedef enum{FALSE, TRUE} BooleanType;
+typedef enum{FALSE, TRUE} BooleanType;
 /*! This definition is as a general definitions to bits turn-on or turn-off any bit*/
-//typedef enum {BIT_OFF, BIT_ON} BIT_ON_OFF_Type;
+typedef enum {BIT_OFF, BIT_ON} BIT_ON_OFF_Type;
 
 
 #endif /* BITS_H_ */
